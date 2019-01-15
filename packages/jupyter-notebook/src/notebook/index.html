@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Notebook Demo</title>
+  </head>
+  <body>
+    <script id='jupyter-config-data' type="application/json">
+      {{ config_data|tojson }}
+    </script>
+    <script src="{{base_url}}build/bundle.js"></script>
+  </body>
+</html>

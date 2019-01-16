@@ -3,7 +3,7 @@
 	"description": "Runs jupyter notebooks in vscode",
 	"version": "0.0.1",
 	"publisher": "samghelms",
-	"repository": "https://github.com/samghelms/vscode-datascience-extensions/packages/jupyter-notebook",
+	"repository": "https://github.com/samghelms/vscode-datascience-extensions/tree/master/packages/jupyter-notebook",
 	"engines": {
 		"vscode": "^1.25.0"
 	},

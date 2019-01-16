@@ -3,11 +3,6 @@
  */
 import * as path from 'path';
 import * as vscode from 'vscode';
-const cats = {
-	'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
-	'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
-	'Testing Cat': 'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif'
-};
 
 export default class JupyterPanel {
 	/**
@@ -15,48 +10,38 @@ export default class JupyterPanel {
 	 */
 	public static currentPanel: JupyterPanel | undefined;
 
-	public static readonly viewType = 'catCoding';
+	public static readonly viewType = 'ipythonView';
 
 	private readonly _panel: vscode.WebviewPanel;
 	private readonly _extensionPath: string;
+	private readonly _notebookPath: string;
 	private _disposables: vscode.Disposable[] = [];
 
-	public static createOrShow(extensionPath: string) {
+	constructor(
+		extensionPath: string,
+		notebookPath: string,
+		urlValue: string,
+		webviewPanel: any = null
+	) {
 		const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
 
-		// If we already have a panel, show it.
-		if (JupyterPanel.currentPanel) {
-			JupyterPanel.currentPanel._panel.reveal(column);
-			return;
+		if(webviewPanel) {
+			this._panel = webviewPanel;
+		} else {
+			this._panel = vscode.window.createWebviewPanel(JupyterPanel.viewType, notebookPath, column || vscode.ViewColumn.One, {
+				// Enable javascript in the webview
+				enableScripts: true,
+
+				// And restric the webview to only loading content from our extension's `media` directory.
+				localResourceRoots: [
+					vscode.Uri.file(path.join(extensionPath, 'media'))
+				]
+			});
 		}
-
-		// Otherwise, create a new panel.
-		const panel = vscode.window.createWebviewPanel(JupyterPanel.viewType, "Cat Coding", column || vscode.ViewColumn.One, {
-			// Enable javascript in the webview
-			enableScripts: true,
-
-			// And restric the webview to only loading content from our extension's `media` directory.
-			localResourceRoots: [
-				vscode.Uri.file(path.join(extensionPath, 'media'))
-			]
-		});
-
-		JupyterPanel.currentPanel = new JupyterPanel(panel, extensionPath);
-	}
-
-	public static revive(panel: vscode.WebviewPanel, extensionPath: string) {
-		JupyterPanel.currentPanel = new JupyterPanel(panel, extensionPath);
-	}
-
-	private constructor(
-		panel: vscode.WebviewPanel,
-		extensionPath: string
-	) {
-		this._panel = panel;
 		this._extensionPath = extensionPath;
-
+		this._notebookPath = notebookPath;
 		// Set the webview's initial html content 
-		this._update();
+		this._update(notebookPath);
 
 		// Listen for when the panel is disposed
 		// This happens when the user closes the panel or when the panel is closed programatically
@@ -65,7 +50,8 @@ export default class JupyterPanel {
 		// Update the content based on view changes
 		this._panel.onDidChangeViewState(e => {
 			if (this._panel.visible) {
-				this._update();
+				this._update(notebookPath);
+				this.open(urlValue, notebookPath);
 			}
 		}, null, this._disposables);
 
@@ -78,22 +64,12 @@ export default class JupyterPanel {
 			}
 		}, null, this._disposables);
 	}
-
-	public doRefactor() {
-		// Send a message to the webview webview.
-		// You can send any JSON serializable data.
-		this._panel.webview.postMessage({ command: 'refactor' });
-	}
-
-	public doConnectToJupyter(serverUrl: string) {
-		// Send a message to the webview webview.
-		// You can send any JSON serializable data.
-		this._panel.webview.postMessage({ serverUrl, command: 'connect' });
+	
+	public open(serverUrl, notebookPath) {
+		this._panel.webview.postMessage({ serverUrl, notebookPath, command: 'connect' });
 	}
 
 	public dispose() {
-		JupyterPanel.currentPanel = undefined;
-
 		// Clean up our resources
 		this._panel.dispose();
 
@@ -105,32 +81,12 @@ export default class JupyterPanel {
 		}
 	}
 
-	private _update() {
-
-		const z = 1 + 2;
-		// Vary the webview's content based on where it is located in the editor.
-		switch (this._panel.viewColumn) {
-			case vscode.ViewColumn.Two:
-				this._updateForCat('Compiling Cat');
-				return;
-
-			case vscode.ViewColumn.Three:
-				this._updateForCat('Testing Cat');
-				return;
-
-			case vscode.ViewColumn.One:
-			default:
-				this._updateForCat('Coding Cat');
-				return;
-		}
+	private _update(title: string) {
+		this._panel.title = title;
+		this._panel.webview.html = this._getHtmlForWebview();
 	}
 
-	private _updateForCat(catName: keyof typeof cats) {
-		this._panel.title = catName;
-		this._panel.webview.html = this._getHtmlForWebview(cats[catName]);
-	}
-
-	private _getHtmlForWebview(catGif: string) {
+	private _getHtmlForWebview() {
 
 		// Local path to main script run in the webview
 		const scriptPathOnDisk = vscode.Uri.file(path.join(this._extensionPath, 'media', 'dist/bundle.js'));
@@ -139,7 +95,7 @@ export default class JupyterPanel {
 		const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
 
 		// Use a nonce to whitelist which scripts can be run
-		const nonce = getNonce();
+		// const nonce = getNonce();
 
 		return `<!doctype html>
 <html lang="en">
@@ -164,11 +120,11 @@ export default class JupyterPanel {
 
 
 
-function getNonce() {
-	let text = "";
-	const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (let i = 0; i < 32; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
-}
+// function getNonce() {
+// 	let text = "";
+// 	const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+// 	for (let i = 0; i < 32; i++) {
+// 		text += possible.charAt(Math.floor(Math.random() * possible.length));
+// 	}
+// 	return text;
+// }

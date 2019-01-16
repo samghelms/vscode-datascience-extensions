@@ -277,6 +277,15 @@
     "@phosphor/disposable" "^1.1.2"
     "@phosphor/signaling" "^1.2.2"
 
+"@jupyterlab/theme-dark-extension@^0.19.1":
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/@jupyterlab/theme-dark-extension/-/theme-dark-extension-0.19.1.tgz#7575421ca7f2a36db41df8a7b48d84db01056518"
+  integrity sha512-bx6UslJEPlS21fkFVsBTt4xs1s58nirSZl3H3jY8YQpx6Tm/6lc/E8JToPuZCZucCBqW0+4/xl7GzphGO2ERJQ==
+  dependencies:
+    "@jupyterlab/application" "^0.19.1"
+    "@jupyterlab/apputils" "^0.19.1"
+    font-awesome "~4.7.0"
+
 "@jupyterlab/theme-light-extension@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@jupyterlab/theme-light-extension/-/theme-light-extension-0.19.1.tgz#6e2712197116041fd385bcd1bd690053f731ddce"

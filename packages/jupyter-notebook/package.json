@@ -1,6 +1,6 @@
 {
-	"name": "cat-coding",
-	"description": "Cat Coding - A Webview API Sample",
+	"name": "jupyter-notebook-vscode",
+	"description": "Runs a jupyter notebook in vscode",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
@@ -10,24 +10,45 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:catCoding.start",
-		"onCommand:catCoding.doRefactor",
-		"onWebviewPanel:catCoding"
+		"onWebviewPanel:ipythonView",
+		"onLanguage:ipython",
+		"onCommand:ipython.showPreview"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"languages": [
+			{
+			  "id": "ipython",
+			  "aliases": [
+				"Jupyter",
+				"jupyter",
+				"ipython"
+			  ],
+			  "extensions": [
+				".ipynb"
+			  ]
+			}
+		],
 		"commands": [
 			{
-				"command": "catCoding.start",
-				"title": "Start cat coding session",
-				"category": "Cat Coding"
-			},
-			{
-				"command": "catCoding.doRefactor",
-				"title": "Do some refactoring",
-				"category": "Cat Coding"
+				"command": "ipython.showPreview",
+				"title": "Open interactive jupyter session for notebook",
+				"category": "Ipython",
+				"icon": {
+					"light": "./media/launcher-light.svg",
+					"dark": "./media/launcher-dark.svg"
+				}
 			}
-		]
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "ipython.showPreview",
+					"when": "editorLangId == ipython",
+					"group": "navigation"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./",

@@ -2,7 +2,7 @@
 	"name": "vscode-jupyterfs",
 	"displayName": "Jupyter file system",
 	"description": "Using Jupyter to implement a file system for vscode",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"publisher": "samghelms",
 	"repository": {
 		"url": "https://github.com/samghelms/vscode-datascience-extensions/tree/master/packages/jupyter-fsprovider",

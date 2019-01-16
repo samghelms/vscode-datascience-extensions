@@ -133,7 +133,7 @@ export class JupyterFS implements vscode.FileSystemProvider {
 
     async rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }) {
 
-        if (!options.overwrite && this._lookup(newUri, true)) {
+        if (!options.overwrite && (await this._lookup(newUri, true))) {
             throw vscode.FileSystemError.FileExists(newUri);
         }
 

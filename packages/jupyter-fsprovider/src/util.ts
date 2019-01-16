@@ -50,14 +50,14 @@ export const createTestJupyterServerConn = async (serverUrl, notebookPath: strin
 		await contentsManager.get(notebookPath, {content: false});
 	} catch(err) {
 		// vscode.window.showErrorMessage(err);
-		return 'false';
+		return 'Cannot connect';
 	}
 };
 
 export const getOrPromptServer = async (context, notebookPath=""): Promise<string | undefined> => {
 	let urlValue: string | undefined = context.workspaceState.get('jupyterServerUrl');
 	const isUp = await createTestJupyterServerConn(urlValue, notebookPath);
-	if (isUp === 'false') {
+	if (isUp === 'Cannot connect') {
 		urlValue = await vscode.window.showInputBox({
 			password: false,
 			placeHolder: 'Enter a jupyter notebook url here ...',
@@ -71,6 +71,6 @@ export const getOrPromptServer = async (context, notebookPath=""): Promise<strin
 		}
 		urlValue = urlValue as string;
 	} 
-	context.workspaceState.update('jupyterServerUrl', urlValue);
+	context.workspaceState.update('jupyterServerUrl', 'urlValue');
 	return urlValue;
 };

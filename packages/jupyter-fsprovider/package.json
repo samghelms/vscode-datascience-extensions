@@ -3,7 +3,7 @@
 	"displayName": "Jupyter file system",
 	"description": "Using Jupyter to implement a file system for vscode",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
+	"publisher": "samghelms",
 	"repository": {
 		"url": "",
 		"type": "git"
@@ -16,20 +16,19 @@
 	],
 	"activationEvents": [
 		"onFileSystem:jupyterfs",
-		"onCommand:jupyterfs.workspaceInit",
-		"onCommand:jupyterfs.test"
+		"onCommand:jupyterfs.workspaceInit"
 	],
 	"main": "./out/src/extension",
 	"contributes": {
 		"commands": [
 			{
 				"command": "jupyterfs.workspaceInit",
-				"title": "Setup Workspace",
+				"title": "Setup Jupyter Workspace",
 				"category": "JupyterFS"
 			},
 			{
-				"command": "jupyterfs.test",
-				"title": "test",
+				"command": "jupyterfs.connectJupyter",
+				"title": "Connect to a Jupyter Server",
 				"category": "JupyterFS"
 			}
 		],
@@ -37,7 +36,11 @@
 			"commandPalette": [
 				{
 					"command": "jupyterfs.workspaceInit",
-					"command": "jupyterfs.test"
+					"when":  "workbenchState != workspace"
+				},
+				{
+					"command": "jupyterfs.connectJupyter",
+					"when":  "workbenchState == workspace"
 				}
 			]
 		}

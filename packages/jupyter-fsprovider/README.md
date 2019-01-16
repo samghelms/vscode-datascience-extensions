@@ -4,14 +4,13 @@ This extension implements file system using the Jupyter contents API and the VSc
 
 This allows you to edit files on remote computers via a jupyter notebook server.
 
+# Usage
 
-To *get started* you need this:
+Open the command pallette (cmd+shift+p or f1) and run "Setup Jupyter Workspace".
 
-* install this extension
-* when *not* having a workspace opened, select 'F1 > [MemFS] Setup Workspace' (optionally save the workspace now)
-* select 'F1 > [MemFs] Create Files' and notice how the explorer is now populated
-* ... try things out, e.g. IntelliSense in memfs-files, create new files, save them, etc
-* select 'F1 > [MemFs] Delete Files' or reload to restart
+Then open the command pallette again and run "Connect to a Jupyter Server". You will be prompted for a jupyter server. This server needs to have the following config setting: `NotebookApp.allow_origin` (you could open the notebook using `jupyter notebook --NotebookApp.allow_origin="*"`. If it is remote you might need to add `--ip="0.0.0.0").
 
+# TODOS
 
-jupyter notebook --NotebookApp.allow_origin="*"
+- [] Make the launch process smoother (one step).
+- [] tests??

@@ -36,11 +36,11 @@
 			"commandPalette": [
 				{
 					"command": "jupyterfs.workspaceInit",
-					"when":  "workbenchState != workspace"
+					"when": "workbenchState != workspace"
 				},
 				{
 					"command": "jupyterfs.connectJupyter",
-					"when":  "workbenchState == workspace"
+					"when": "workbenchState == workspace"
 				}
 			]
 		}

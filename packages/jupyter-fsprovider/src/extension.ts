@@ -9,7 +9,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const jupyterFS = new JupyterFS();
     context.subscriptions.push(vscode.workspace.registerFileSystemProvider('jupyterfs', jupyterFS, { isCaseSensitive: true }));
-
     context.subscriptions.push(vscode.commands.registerCommand('jupyterfs.workspaceInit', async _ => {
         vscode.workspace.updateWorkspaceFolders(0, 0, { uri: vscode.Uri.parse('jupyterfs:/'), name: "JupyterFS" });
         

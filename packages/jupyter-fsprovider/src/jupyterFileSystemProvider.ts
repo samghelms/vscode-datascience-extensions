@@ -86,6 +86,9 @@ export class JupyterFS implements vscode.FileSystemProvider {
         let entry = await this._lookup(uri, false);
         if (entry.type === vscode.FileType.File) {
             let content = await this.contentsManager.get(uri.path)
+            if (content.type === "notebook") {
+                return Buffer.from(JSON.stringify(content.content, null, 2), 'utf8');
+            }
             return Buffer.from(content.content, 'utf8');
         }
         throw vscode.FileSystemError.FileIsADirectory(uri);

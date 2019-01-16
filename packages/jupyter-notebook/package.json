@@ -1,8 +1,9 @@
 {
 	"name": "jupyter-notebook-vscode",
-	"description": "Runs a jupyter notebook in vscode",
+	"description": "Runs jupyter notebooks in vscode",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
+	"publisher": "samghelms",
+	"repository": "https://github.com/samghelms/vscode-datascience-extensions/packages/jupyter-notebook",
 	"engines": {
 		"vscode": "^1.25.0"
 	},
@@ -18,15 +19,15 @@
 	"contributes": {
 		"languages": [
 			{
-			  "id": "ipython",
-			  "aliases": [
-				"Jupyter",
-				"jupyter",
-				"ipython"
-			  ],
-			  "extensions": [
-				".ipynb"
-			  ]
+				"id": "ipython",
+				"aliases": [
+					"Jupyter",
+					"jupyter",
+					"ipython"
+				],
+				"extensions": [
+					".ipynb"
+				]
 			}
 		],
 		"commands": [

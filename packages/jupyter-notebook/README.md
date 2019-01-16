@@ -16,9 +16,9 @@ WARNING: I have not implemented a method for the notebook and other editors to t
 
 # TODOS:
 
-[] Make it easier to launch jupyter notebooks.
-[] Allow automatically launching a jupyter notebook instance via the python package.
-[] Password/https authentication.
-[] Better warning messages.
-[] Tests??
-[] Make it so that the main process is communicating with jupyter and sending the jupyter results to the webview. This will allow for efficient updates to multiple editor windows.
+- [] Make it easier to launch jupyter notebooks.
+- [] Allow automatically launching a jupyter notebook instance via the python package.
+- [] Password/https authentication.
+- [] Better warning messages.
+- [] Tests??
+- [] Make it so that the main process is communicating with jupyter and sending the jupyter results to the webview. This will allow for efficient updates to multiple editor windows.

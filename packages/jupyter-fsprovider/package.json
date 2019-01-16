@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "samghelms",
 	"repository": {
-		"url": "",
+		"url": "https://github.com/samghelms/vscode-datascience-extensions/tree/master/packages/jupyter-fsprovider",
 		"type": "git"
 	},
 	"engines": {

@@ -12,3 +12,6 @@ To *get started* you need this:
 * select 'F1 > [MemFs] Create Files' and notice how the explorer is now populated
 * ... try things out, e.g. IntelliSense in memfs-files, create new files, save them, etc
 * select 'F1 > [MemFs] Delete Files' or reload to restart
+
+
+jupyter notebook --NotebookApp.allow_origin="*"

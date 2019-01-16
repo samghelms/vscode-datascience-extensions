@@ -74,14 +74,9 @@ export class JupyterFS implements vscode.FileSystemProvider {
         }
         let result: [string, vscode.FileType][] = [];
         let folderContent = (await this.contentsManager.get(uri.path)).content;
-        console.log(folderContent)
-        console.log("what is going on")
         for (const content of folderContent) {
-            console.log("pushing", content);
             result.push([content.name, vscodeTypeFromJupyterType(content.type)]);
         }
-        console.log("what is going on 2")
-        console.log(result);
         return result;
     }
 
@@ -108,7 +103,7 @@ export class JupyterFS implements vscode.FileSystemProvider {
             }
             if (options.create) {
                 await this.contentsManager.save(uri.path, {content: content.toString(), format: 'text'});
-                this._fireSoon({ type: vscode.FileChangeType.Changed, uri });
+                this._fireSoon({ type: vscode.FileChangeType.Created, uri });
                 return;
             }
             throw err;
@@ -128,7 +123,7 @@ export class JupyterFS implements vscode.FileSystemProvider {
         } catch(err) {
             throw err;
         }
-        this._fireSoon({ type: vscode.FileChangeType.Created, uri });
+        this._fireSoon({ type: vscode.FileChangeType.Changed, uri });
     }
 
     // --- manage files/folders
@@ -156,16 +151,23 @@ export class JupyterFS implements vscode.FileSystemProvider {
     }
 
     async createDirectory(uri: vscode.Uri) {
-        console.log('createDirectory');
+        let dirname = uri.with({ path: path.posix.dirname(uri.path) });
         let newDir: Contents.IModel;
-        let jupyterReqOpts = getJupyterNewReq(uri.path, 'directory');
+
+        let pass = false;
+        const res = await this._lookup(uri, true);
+        if (res !== undefined) {
+            throw vscode.FileSystemError.FileExists( uri );
+        }
+
         try {
-            newDir = await this.contentsManager.newUntitled(jupyterReqOpts);
+            newDir = await this.contentsManager.newUntitled({path: dirname.path, type: "directory"});
+            await this.contentsManager.rename(newDir.path, uri.path);
+            // awa
         } catch(err) {
             throw err;
         }
 
-        let dirname = uri.with({ path: path.posix.dirname(uri.path) });
         this._fireSoon({ type: vscode.FileChangeType.Changed, uri: dirname }, { type: vscode.FileChangeType.Created, uri });
     }
 

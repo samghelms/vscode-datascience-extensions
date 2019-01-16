@@ -1,6 +1,7 @@
 import { ContentsManager, ServerConnection, Contents } from '@jupyterlab/services';
 import * as Url from 'url-parse';
 import * as vscode from 'vscode';
+import * as vscode_helpers from 'vscode-helpers';
 
 export const createContentsManager = async (serverUrl): Promise<ContentsManager> => {
     const parsedAddress = new Url(serverUrl, null, true);
@@ -17,14 +18,14 @@ export const createContentsManager = async (serverUrl): Promise<ContentsManager>
     return contentsManager;
 }
 
-export const createTestJupyterServerConn = async (serverUrl) => {
-    const contentsManager = await createContentsManager(serverUrl);
-    try {
-        await contentsManager.get('');
-    } catch(err) {
-        return 'false';
-    }
-}
+// export const createTestJupyterServerConn = async (serverUrl) => {
+//     const contentsManager = await createContentsManager(serverUrl);
+//     try {
+//         await contentsManager.get('');
+//     } catch(err) {
+//         return 'false';
+//     }
+// }
 
 export const getJupyterNewReq = (uri: string, type: 'notebook' | 'file' | 'directory'): Contents.ICreateOptions => {
     const extSplit = uri.split('.');
@@ -41,3 +42,35 @@ export const vscodeTypeFromJupyterType = (jupyterType: Contents.ContentType): vs
     }
     return vscode.FileType.File;
 }
+
+// TODO: better error messages here
+export const createTestJupyterServerConn = async (serverUrl, notebookPath: string) => {
+	const contentsManager = await createContentsManager(serverUrl);
+	try {
+		await contentsManager.get(notebookPath, {content: false});
+	} catch(err) {
+		// vscode.window.showErrorMessage(err);
+		return 'false';
+	}
+};
+
+export const getOrPromptServer = async (context, notebookPath=""): Promise<string | undefined> => {
+	let urlValue: string | undefined = context.workspaceState.get('jupyterServerUrl');
+	const isUp = await createTestJupyterServerConn(urlValue, notebookPath);
+	if (isUp === 'false') {
+		urlValue = await vscode.window.showInputBox({
+			password: false,
+			placeHolder: 'Enter a jupyter notebook url here ...',
+			prompt: "Open Jupyter Server",
+			validateInput: (v) => {
+				return createTestJupyterServerConn(v, '');
+			}
+		});
+		if (vscode_helpers.isEmptyString(urlValue)) {
+			throw "unhandled validation error";
+		}
+		urlValue = urlValue as string;
+	} 
+	context.workspaceState.update('jupyterServerUrl', urlValue);
+	return urlValue;
+};

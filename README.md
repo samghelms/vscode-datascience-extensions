@@ -36,6 +36,8 @@ Allows remotely editing a file system via a jupyter notebook server.
 
 9. SQL IDE that uses sqlalchemy + python (+ optionally jupyter for remote execution) to connect to arbitrary databases.
 
+10. More integrated experience for remote debuggin (bundle the debugger with a jupyter server? )
+
 # TODOS
 
 - [] Modularize the packages in this repository so that they share code better.

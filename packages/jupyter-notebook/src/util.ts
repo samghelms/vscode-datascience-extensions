@@ -30,7 +30,8 @@ export const createTestJupyterServerConn = async (serverUrl, notebookPath: strin
 };
 
 export const getOrPromptServer = async (context, notebookPath): Promise<string> => {
-	let urlValue: string = context.workspaceState.get('jupyterServerUrl');
+	console.log(context.globalState.get('jupyterServerUrl'));
+	let urlValue: string = context.globalState.get('jupyterServerUrl');
 	const isUp = await createTestJupyterServerConn(urlValue, notebookPath);
 	if (isUp === 'false') {
 		urlValue = await vscode.window.showInputBox({
@@ -46,6 +47,6 @@ export const getOrPromptServer = async (context, notebookPath): Promise<string> 
 		}
 		urlValue = urlValue as string;
 	} 
-	context.workspaceState.update('jupyterServerUrl', urlValue);
+	context.globalState.update('jupyterServerUrl', urlValue);
 	return urlValue;
 };

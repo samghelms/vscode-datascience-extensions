@@ -22,3 +22,5 @@ WARNING: I have not implemented a method for the notebook and other editors to t
 - [] Better warning messages.
 - [] Tests??
 - [] Make it so that the main process is communicating with jupyter and sending the jupyter results to the webview. This will allow for efficient updates to multiple editor windows.
+- [] Fix flipping between tabs
+- [] Better saving functionality

@@ -31,6 +31,7 @@ export default class JupyterPanel {
 			this._panel = vscode.window.createWebviewPanel(JupyterPanel.viewType, notebookPath, column || vscode.ViewColumn.One, {
 				// Enable javascript in the webview
 				enableScripts: true,
+				retainContextWhenHidden: true,
 
 				// And restric the webview to only loading content from our extension's `media` directory.
 				localResourceRoots: [
@@ -48,12 +49,12 @@ export default class JupyterPanel {
 		this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
 		// Update the content based on view changes
-		this._panel.onDidChangeViewState(e => {
-			if (this._panel.visible) {
-				this._update(notebookPath);
-				this.open(urlValue, notebookPath);
-			}
-		}, null, this._disposables);
+		// this._panel.onDidChangeViewState(e => {
+		// 	if (this._panel.visible) {
+				// this._update(notebookPath);
+				// this.open(urlValue, notebookPath);
+			// }
+		// }, null, this._disposables);
 
 		// Handle messages from the webview
 		this._panel.webview.onDidReceiveMessage(message => {
